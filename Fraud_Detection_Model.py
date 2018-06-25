@@ -1,17 +1,7 @@
 import pandas as pd
 import numpy as np
 
-# Import and store dataset
 credit_card_data = pd.read_csv('creditcard.csv')
-#print(credit_card_data)
-
-# Splitting data into 4 sets
-# 1. Shuffle/randomize data
-# 2. One-hot encoding
-# 3. Normalize
-# 4. Splitting up X/y values
-# 5. Convert data_frames to numpy arrays (float32)
-# 6. Splitting the final data into X/y train/test
 
 # Shuffle and randomize data
 shuffled_data = credit_card_data.sample(frac=1)
@@ -34,26 +24,21 @@ count_legit, count_fraud = np.unique(credit_card_data['Class'], return_counts=Tr
 fraud_ratio = float(count_fraud / (count_legit + count_fraud))
 print('Percent of fraudulent transactions: ', fraud_ratio)
 
-# Applies a logit weighting of 578 (1/0.0017) to fraudulent transactions to cause model to pay more attention to them
+# Applies a logit weighting of 578 (1/0.0017) to fraudulent transactions
 weighting = 1 / fraud_ratio
 raw_y_train[:, 1] = raw_y_train[:, 1] * weighting
 
 import tensorflow as tf
-
-# 30 cells for the input
 input_dimensions = ar_X.shape[1]
-# 2 cells for the output
 output_dimensions = ar_y.shape[1]
-# 100 cells for the 1st layer
 num_layer_1_cells = 100
-# 150 cells for the second layer
 num_layer_2_cells = 150
 
-# We will use these as inputs to the model when it comes time to train it (assign values at run time)
+# using these as inputs to the model when it comes time to train it (assign values at run time)
 X_train_node = tf.placeholder(tf.float32, [None, input_dimensions], name='X_train')
 y_train_node = tf.placeholder(tf.float32, [None, output_dimensions], name='y_train')
 
-# We will use these as inputs to the model once it comes time to test it
+# using these as inputs to the model once it comes time to test it
 X_test_node = tf.constant(raw_X_test, name='X_test')
 y_test_node = tf.constant(raw_y_test, name='y_test')
 
